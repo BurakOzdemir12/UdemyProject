@@ -1,0 +1,15 @@
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Service.deps.json
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Service.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Service.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Repository.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Repository.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.csproj.AssemblyReference.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.AssemblyInfoInputs.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.AssemblyInfo.cs
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.csproj.CoreCompileInputs.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyPro.D7E4C241.Up2Date
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\refint\UdemyProject.Service.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\ref\UdemyProject.Service.dll
