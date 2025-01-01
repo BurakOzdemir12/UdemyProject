@@ -11,7 +11,7 @@ namespace UdemyProject.Service.Interfaces
 {
     public interface ITokenService
     {
-        TokenDto createToken(AppUser userApp);
-        ClientTokenDto createClientToken(Client client);
+        TokenDto CreateToken(AppUser userApp);
+        ClientTokenDto CreateClientToken(Client client);
     }
 }

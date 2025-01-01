@@ -12,3 +12,4 @@ C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Rep
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Repository\obj\Debug\net8.0\UdemyProject.Repository.pdb
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Repository\obj\Debug\net8.0\UdemyProject.Repository.genruntimeconfig.cache
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Repository\obj\Debug\net8.0\ref\UdemyProject.Repository.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Repository\obj\Debug\net8.0\UdemyProject.Repository.sourcelink.json

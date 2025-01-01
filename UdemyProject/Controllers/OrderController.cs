@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using UdemyProject.Repository.Entities;
 using UdemyProject.Service.Interfaces;
 
 namespace UdemyProject.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -20,7 +23,8 @@ namespace UdemyProject.API.Controllers
         [HttpPost("buy/{courseId}")]
         public async Task<IActionResult> BuyCourse(int courseId)
         {
-            var userIdString = User.FindFirst("sub")?.Value;
+            //var userIdString = User.FindFirst("sub")?.Value;
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             {
@@ -34,7 +38,9 @@ namespace UdemyProject.API.Controllers
         [HttpGet("my-courses")]
         public async Task<IActionResult> GetUserCourses()
         {
-            var userIdString = User.FindFirst("sub")?.Value;
+          // var userIdString = User.FindFirst("sub")?.Value;
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
 
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             {
@@ -63,7 +69,6 @@ namespace UdemyProject.API.Controllers
         }
        
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] Order order)
         {
             if (id != order.Id)
@@ -79,7 +84,6 @@ namespace UdemyProject.API.Controllers
             return Ok(existCourse);
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var existCourse = await _orderService.GetOrderByIdAsync(id);

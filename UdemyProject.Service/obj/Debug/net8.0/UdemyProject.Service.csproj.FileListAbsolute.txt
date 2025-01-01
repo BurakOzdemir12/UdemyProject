@@ -13,3 +13,6 @@ C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Ser
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\refint\UdemyProject.Service.dll
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.pdb
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\ref\UdemyProject.Service.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Shared.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\bin\Debug\net8.0\UdemyProject.Shared.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Service\obj\Debug\net8.0\UdemyProject.Service.sourcelink.json

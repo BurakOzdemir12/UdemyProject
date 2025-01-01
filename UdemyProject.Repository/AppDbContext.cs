@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UdemyProject.Repository.Entities;
+using System.Reflection.Emit;
 
 namespace UdemyProject.Repository
 {
@@ -19,11 +20,18 @@ namespace UdemyProject.Repository
         public DbSet<Course> Courses { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        //public DbSet<UserRefreshToken> userRefreshTokens { get; set; }
+        public DbSet<UserRefreshToken> userRefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<UserRefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.UserId); // UserId birincil anahtar olarak tanımlandı
+                entity.Property(e => e.Code).IsRequired();
+                entity.Property(e => e.Expiration).IsRequired();
+            });
 
             builder.Entity<Order>()
                     .HasOne(o => o.User)

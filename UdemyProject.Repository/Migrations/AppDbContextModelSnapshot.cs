@@ -317,6 +317,23 @@ namespace UdemyProject.Repository.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("UdemyProject.Repository.Entities.UserRefreshToken", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("userRefreshTokens");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("UdemyProject.Repository.Entities.AppRole", null)

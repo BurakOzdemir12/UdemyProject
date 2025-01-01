@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using UdemyProject.Repository.Entities;
+using UdemyProject.Service.Interfaces;
+using UdemyProject.Shared.DTOs;
 
 namespace UdemyProject.API.Controllers
 {
@@ -11,64 +14,27 @@ namespace UdemyProject.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<AppRole> _roleManager;
-        private readonly SignInManager<AppUser> _signInManager;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager)
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
+            _userService = userService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string fullName,string email, string password, string userName)
+        public async Task<IActionResult> Register([FromForm]CreateUserDto createUserDto)
         {
-            var hasUser = await _userManager.FindByEmailAsync(email);
-            if (hasUser != null)
-            {
-                return BadRequest("Bu mail adresi kullanılıyor");
-            }
+            var user =  await _userService.UserRegisterAsync(createUserDto);
+            return Ok(user);
 
-            var newUser = new AppUser()
-            {
-                FullName = fullName,
-                UserName = userName,
-                Email = email,
-            };
-
-            var createdUser = await _userManager.CreateAsync(newUser, password);
-            if (!createdUser.Succeeded)
-            {
-                return BadRequest("Kullanıcı Oluşturulamadı");
-            }
-
-            await _signInManager.SignInAsync(newUser, isPersistent: false);
-            return Ok(newUser);
         }
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(string email, string password)
+        
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                return BadRequest("Kullanıcı bulunamadı");
-            }
-
-            var passwordCheck = await _userManager.CheckPasswordAsync(user, password);
-            if (!passwordCheck)
-            {
-                return BadRequest("Email veya şifre yanlış");
-            }
-
-            await _signInManager.SignInAsync(user, new AuthenticationProperties()
-            {
-                IsPersistent = true,
-            });
-
-            return Ok();
+            var user= await _userService.GetUserByMail(HttpContext.User.Identity.Name);
+            return Ok(user);
         }
-       
     }
 }

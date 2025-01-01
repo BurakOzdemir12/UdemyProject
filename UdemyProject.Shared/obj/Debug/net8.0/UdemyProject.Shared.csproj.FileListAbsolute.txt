@@ -1,0 +1,13 @@
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\bin\Debug\net8.0\UdemyProject.Shared.deps.json
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\bin\Debug\net8.0\UdemyProject.Shared.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\bin\Debug\net8.0\UdemyProject.Shared.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.csproj.AssemblyReference.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.AssemblyInfoInputs.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.AssemblyInfo.cs
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.csproj.CoreCompileInputs.cache
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.sourcelink.json
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\refint\UdemyProject.Shared.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\UdemyProject.Shared.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject.Shared\obj\Debug\net8.0\ref\UdemyProject.Shared.dll

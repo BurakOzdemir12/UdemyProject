@@ -267,3 +267,6 @@ C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\obj
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\obj\Debug\net8.0\UdemyProject.API.genruntimeconfig.cache
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\obj\Debug\net8.0\ref\UdemyProject.API.dll
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\UdemyProject.Shared.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\UdemyProject.Shared.pdb
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\obj\Debug\net8.0\UdemyProject.API.sourcelink.json
