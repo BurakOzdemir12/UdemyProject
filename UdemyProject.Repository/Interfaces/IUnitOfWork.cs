@@ -10,5 +10,6 @@ namespace UdemyProject.Repository.Interfaces
     {
         Task CommitAsync();
         void Commit();
+
     }
 }

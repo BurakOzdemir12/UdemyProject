@@ -42,7 +42,7 @@ namespace UdemyProject.Repository
                 .HasOne(o => o.Course)
                 .WithMany()
                 .HasForeignKey(o => o.CourseId);
-
+            
             builder.Entity<Payment>()
                 .HasOne(o=> o.User)
                 .WithMany()
@@ -52,6 +52,7 @@ namespace UdemyProject.Repository
                 .HasOne(o=>o.Course)
                 .WithMany()
                 .HasForeignKey(o => o.CourseId);
+            
         }
 
     }

@@ -13,6 +13,11 @@ using UdemyProject.Service.Interfaces;
 using UdemyProject.Service.Services;
 using UdemyProject.Shared.Configurations;
 using UdemyProject.Shared.Services;
+using FluentValidation.AspNetCore;
+using UdemyProject.API.Validations;
+using UdemyProject.API.Middlewares;
+using UdemyProject.Shared.Middlewares;
+using UdemyProject.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +49,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.UseCustomValidationResponse();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +76,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminRole", policy => policy.RequireClaim("roles", "admin"));
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(config =>
+    {
+        config.RegisterValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -110,10 +121,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCustomExceptionHandler();
+
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<UserIdMiddleware>();
 app.MapControllers();
 
 app.Run();

@@ -270,3 +270,6 @@ C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\UdemyProject.Shared.dll
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\UdemyProject.Shared.pdb
 C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\obj\Debug\net8.0\UdemyProject.API.sourcelink.json
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\qbura\OneDrive\Masaüstü\Inveon Bootcamp\UdemyProject\UdemyProject\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll

@@ -9,6 +9,8 @@ namespace UdemyProject.Repository.Interfaces
 {
     public interface IOrderRepository
     {
+        Task<bool> UserHasPurchasedCourseAsync(Guid userId, int courseId);
+
         Task<List<Course>> GetUserCoursesAsync(Guid userId);
 
         Task<List<Order>> GetAllAsync();

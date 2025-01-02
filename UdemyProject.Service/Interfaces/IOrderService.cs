@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UdemyProject.Repository.Entities;
+using UdemyProject.Shared.DTOs;
 
 namespace UdemyProject.Service.Interfaces
 {
     public interface IOrderService
     {
-        Task<List<Course>> GetUserCoursesAsync(Guid userId);
-        Task<List<Order>> GetOrdersAsync();
-        Task<Order> GetOrderByIdAsync(int id);
-        Task AddOrderAsync(Guid userId,int courseId);
-        Task DeleteOrderAsync(int id);
-        Task UpdateOrderAsync(Order order);
+        Task<Response<object>> BuyCourseAsync(Guid userId, int courseId, PurchaseRequestDto purchaseRequestDto);
+        Task<Response<List<Course>>> GetUserCoursesAsync(Guid userId);
+        Task<Response<List<Order>>> GetOrdersAsync();
+        Task<Response<Order>> GetOrderByIdAsync(int id);
+        Task<Response<object>> DeleteOrderAsync(int id);
+        Task<Response<object>> UpdateOrderAsync(Order order);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UdemyProject.Repository.Entities;
 using UdemyProject.Repository.Interfaces;
 using UdemyProject.Service.Interfaces;
+using UdemyProject.Shared.DTOs;
 
 namespace UdemyProject.Service.Services
 {
@@ -23,7 +24,7 @@ namespace UdemyProject.Service.Services
             {
                 UserId = userId,
                 CourseId = courseId,
-                Amount = amount,
+                Amount = 1,
                 PaymentDate = DateTime.UtcNow,
                 PaymentStatus = status,
                 PaymentMethod = "Credit Card" // Sabit örnek
@@ -32,15 +33,25 @@ namespace UdemyProject.Service.Services
             await _paymentRepository.AddPaymentAsync(payment);
         }
 
-        public async Task<List<Payment>> GetUserPaymentsAsync(Guid userId)
+        public async Task<Response<List<Payment>>> GetUserPaymentsAsync(Guid userId)
         {
-            return await _paymentRepository.GetUserPaymentsAsync(userId);
+            var payments = await _paymentRepository.GetUserPaymentsAsync(userId);
+
+            if (payments == null || !payments.Any())
+            {
+                return Response<List<Payment>>.Fail("No payments found for the user.", 404, true);
+            }
+
+            return Response<List<Payment>>.Success(payments, 200);
         }
+
 
         public async Task<bool> ProcessPaymentAsync(decimal amount, string paymentDetails)
         {
             await Task.Delay(500); // Ödeme simülasyonu
             return !string.IsNullOrEmpty(paymentDetails) && amount > 0;
         }
+
+       
     }
 }

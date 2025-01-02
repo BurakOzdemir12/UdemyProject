@@ -36,10 +36,15 @@ namespace UdemyProject.Service.Services
                 UserName = createUserDto.UserName ,
                 FullName = createUserDto.FullName ,
             };
+            var hasUser = await _userManager.FindByEmailAsync(createUserDto.Email);
+
+            if (hasUser != null)
+            {
+                throw new Exception("Kullanıcı mevcut");
+            }
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);
 
-            var hasUser = await _userManager.FindByEmailAsync(createUserDto.Email);
 
             if (!result.Succeeded)
             {
@@ -47,10 +52,9 @@ namespace UdemyProject.Service.Services
 
                 throw new Exception("Kullanıcı Oluşturulamadı");
             }
-            if (hasUser)
-            {
-                throw new Exception("kullanıcı mevcut");
-            }
+
+            await AssignDefaultRoleToUser(user);
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return new AppUserDto
@@ -61,6 +65,18 @@ namespace UdemyProject.Service.Services
                 UserName = user.UserName,
             };
 
+        }
+
+        private async Task AssignDefaultRoleToUser(AppUser user)
+        {
+            const string defaultRole = "user";
+
+            if (!await _roleManager.RoleExistsAsync(defaultRole))
+            {
+                await _roleManager.CreateAsync(new AppRole { Name = defaultRole });
+            }
+
+            await _userManager.AddToRoleAsync(user, defaultRole);
         }
 
         public async Task<AppUserDto> GetUserByMail(string email)
@@ -78,5 +94,6 @@ namespace UdemyProject.Service.Services
                 UserName = user.UserName
             };
         }
+        
     }
 }

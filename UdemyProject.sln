@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdemyProject.Repository", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdemyProject.Service", "UdemyProject.Service\UdemyProject.Service.csproj", "{2763DF1C-2B8D-4845-8DA8-43498003192D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdemyProject.Shared", "UdemyProject.Shared\UdemyProject.Shared.csproj", "{5CD639E9-E37F-4310-B076-DD4FA186F1F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UdemyProject.Shared", "UdemyProject.Shared\UdemyProject.Shared.csproj", "{5CD639E9-E37F-4310-B076-DD4FA186F1F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{956BB5B8-A690-4F5C-9110-2A3F5BE6BF2D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

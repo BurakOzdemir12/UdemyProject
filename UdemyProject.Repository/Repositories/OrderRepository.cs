@@ -57,5 +57,10 @@ namespace UdemyProject.Repository.Repositories
             _dbContext.Orders.Update(order);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> UserHasPurchasedCourseAsync(Guid userId, int courseId)
+        {
+            return await _dbContext.Orders.AnyAsync(o => o.UserId == userId && o.CourseId == courseId);
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace UdemyProject.API.Controllers
 
         }
         [HttpPost]
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Create([FromBody] Course course)
         {
             if (course == null)

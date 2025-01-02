@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using UdemyProject.Repository.Entities;
 using UdemyProject.Service.Interfaces;
+using UdemyProject.Service.Services;
+using UdemyProject.Shared.DTOs;
 
 namespace UdemyProject.API.Controllers
 {
@@ -15,82 +18,143 @@ namespace UdemyProject.API.Controllers
     {
 
         private readonly IOrderService _orderService;
+        private readonly IPaymentService _paymentService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IPaymentService paymentService)
         {
             _orderService = orderService;
+            _paymentService = paymentService;
         }
-        [HttpPost("buy/{courseId}")]
-        public async Task<IActionResult> BuyCourse(int courseId)
-        {
-            //var userIdString = User.FindFirst("sub")?.Value;
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        [HttpPost("buy/{courseId}")]
+        public async Task<IActionResult> BuyCourse(int courseId, [FromBody] PurchaseRequestDto purchaseRequest)
+        {/*
+            var isPaymentSuccessful = await _paymentService.ProcessPaymentAsync(purchaseRequest.Amount, purchaseRequest.PaymentDetails);
+            if (!isPaymentSuccessful)
             {
-                return Unauthorized();
+                return BadRequest("Ödeme başarısız oldu.");
+            }
+            */
+            if (!HttpContext.Items.TryGetValue("UserId", out var userIdObj) || userIdObj is not Guid userId)
+            {
+                return Unauthorized(Response<object>.Fail("Unauthorized access.", 401, true));
             }
 
-            await _orderService.AddOrderAsync(userId, courseId);
-            return Ok("Kurs başarıyla satın alındı.");
+            var response = await _orderService.BuyCourseAsync(userId, courseId, purchaseRequest);
+
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            await _paymentService.AddPaymentAsync(userId, courseId, purchaseRequest.Amount, "Success");
+
+            return Ok(response);
         }
 
-        [HttpGet("my-courses")]
+       
+
+        [HttpGet("user-courses")]
         public async Task<IActionResult> GetUserCourses()
         {
-          // var userIdString = User.FindFirst("sub")?.Value;
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!HttpContext.Items.TryGetValue("UserId", out var userIdObj) || userIdObj is not Guid userId)
+            {
+                return Unauthorized(Response<object>.Fail("Unauthorized access.", 401, true));
+            }
 
+            var response = await _orderService.GetUserCoursesAsync(userId);
 
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("user-payments")]
+        public async Task<IActionResult> GetUserPayments()
+        {
+            //var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            /*
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             {
                 return Unauthorized();
             }
+            */
+            if (!HttpContext.Items.TryGetValue("UserId", out var userIdObj) || userIdObj is not Guid userId)
+            {
+                return Unauthorized(Response<object>.Fail("Unauthorized access.", 401, true));
+            }
 
-            var courses = await _orderService.GetUserCoursesAsync(userId);
-            return Ok(courses);
+            var response = await _paymentService.GetUserPaymentsAsync(userId);
+
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var courses = await _orderService.GetOrdersAsync();
-            return Ok(courses);
+            var response = await _orderService.GetOrdersAsync();
+
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var course = await _orderService.GetOrderByIdAsync(id);
-            if (course == null)
-            {
-                return NotFound("Sipariş bulunamadı");
-            }
-            return Ok(course);
+            var response = await _orderService.GetOrderByIdAsync(id);
 
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
+            return Ok(response);
         }
-       
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Order order)
         {
+            if (!HttpContext.Items.TryGetValue("UserId", out var userIdObj) || userIdObj is not Guid userId)
+            {
+                return Unauthorized(Response<object>.Fail("Unauthorized access.", 401, true));
+            }
+
             if (id != order.Id)
             {
-                return BadRequest("Sipariş uyuşmuyor");
+                return BadRequest(Response<object>.Fail("Order ID mismatch.", 400, true));
             }
-            var existCourse = await _orderService.GetOrderByIdAsync(id);
-            if (existCourse == null)
+
+            var response = await _orderService.UpdateOrderAsync(order);
+
+            if (!response.IsSuccessful)
             {
-                return NotFound("Kurs bulunamadı");
+                return StatusCode(response.StatusCode, response);
             }
-            await _orderService.UpdateOrderAsync(order);
-            return Ok(existCourse);
+
+            return Ok(response);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existCourse = await _orderService.GetOrderByIdAsync(id);
-            if (existCourse == null)
-                return NotFound("Silinecek kurs bulunamadı.");
+            var response = await _orderService.DeleteOrderAsync(id);
 
-            await _orderService.DeleteOrderAsync(id);
+            if (!response.IsSuccessful)
+            {
+                return StatusCode(response.StatusCode, response);
+            }
+
             return NoContent();
         }
     }
