@@ -18,8 +18,23 @@ using UdemyProject.API.Validations;
 using UdemyProject.API.Middlewares;
 using UdemyProject.Shared.Middlewares;
 using UdemyProject.Shared.Extensions;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var provider = builder.Services.BuildServiceProvider();
+var configuration = provider.GetRequiredService<IConfiguration>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") 
+              .AllowAnyMethod() 
+              .AllowAnyHeader() 
+              .AllowCredentials(); 
+    });
+});
 
 // Logging for debugging
 builder.Logging.ClearProviders();
@@ -77,6 +92,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers()
+     .AddJsonOptions(options =>
+     {
+         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+     })
     .AddFluentValidation(config =>
     {
         config.RegisterValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
@@ -85,6 +104,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "UdemyProject.API", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -113,6 +133,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -123,7 +144,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCustomExceptionHandler();
 
-
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

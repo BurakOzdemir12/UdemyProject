@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -42,21 +41,22 @@ namespace UdemyProject.Service.Services
             _userRefreshToken = userRefreshToken;
         }
 
-        public ClientTokenDto CreateClientToken(ClientLoginDto clientLoginDto)
+        public Response<ClientTokenDto> CreateClientToken(ClientLoginDto clientLoginDto)
         {
             var client = _clients.FirstOrDefault(x=>x.Id == clientLoginDto.ClientId && x.Secret == clientLoginDto.ClientSecret);
 
             if (client == null)
             {
-                throw new Exception("ClientId or ClientSecret not found");
+                return Response<ClientTokenDto>.Fail("ClientId or ClientSecret not found", 404, true);
+
             }
 
             var token = _tokenService.CreateClientToken(client);
+            return Response<ClientTokenDto>.Success(token, 200);
 
-            return token;
         }
 
-        public async Task<TokenDto> CreateTokenAsync(LoginDto loginDto)
+        public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
             if (loginDto == null) { throw new ArgumentNullException(nameof(loginDto)); }
 
@@ -64,11 +64,12 @@ namespace UdemyProject.Service.Services
 
             if (user == null)
             {
-                throw new Exception("Email veya Parola Yanlış");
+                return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
             }
             if (!await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                throw new Exception("Email veya Parola Yanlış");
+                return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
+
             }
 
             var token = _tokenService.CreateToken(user);
@@ -92,24 +93,23 @@ namespace UdemyProject.Service.Services
                 userRefreshTokens.Expiration = token.RefreshTokenExpiration;
             }
             await _unitOfWork.CommitAsync();
-
-            return token;
+            return Response<TokenDto>.Success(token, 200);
         }
 
-        public async Task<TokenDto> CreateTokenByRefreshToken(string refreshToken)
+        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
             var existRefreshToken =
                           await _userRefreshToken.Where(x=> x.Code == refreshToken).SingleOrDefaultAsync();
             //fast fail
             if (existRefreshToken == null)
             {
-                throw new Exception("Refresh token not found");
+                return Response<TokenDto>.Fail("Refresh token not found", 404, true);
             }
 
 
             if (existRefreshToken.Expiration < DateTime.Now)
             {
-                throw new Exception("Refresh token has expired");
+                return Response<TokenDto>.Fail("Refresh token has expired", 404, true);
             }
 
 
@@ -117,7 +117,7 @@ namespace UdemyProject.Service.Services
 
             if (user == null)
             {
-                throw new Exception("User Id not found");
+                return Response<TokenDto>.Fail("User Id not found", 404, true);
             }
 
             var tokenDto = _tokenService.CreateToken(user);
@@ -127,25 +127,21 @@ namespace UdemyProject.Service.Services
 
             await _unitOfWork.CommitAsync();
 
-            return tokenDto;
+            return Response<TokenDto>.Success(tokenDto, 200);
         }
 
-        public async Task<TokenDto> RevokerefreshToken(string refreshToken)
+        public async Task<Response<NullDataDto>> RevokerefreshToken(string refreshToken)
         {
             var existRefreshToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync();
             if (existRefreshToken == null)
             {
-                throw new Exception("Refresh token not found");
+                return Response<NullDataDto>.Fail("Refresh token not found", 404, true);
             }
             _userRefreshToken.Remove(existRefreshToken);
 
             await _unitOfWork.CommitAsync();
 
-            return null;
-
-
+            return Response<NullDataDto>.Success(200);
         }
-
-       
     }
 }

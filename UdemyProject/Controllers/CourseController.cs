@@ -34,9 +34,10 @@ namespace UdemyProject.API.Controllers
 
         }
         [HttpPost]
-        [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create([FromBody] Course course)
+        //[Authorize(Roles ="Admin")]
+        public async Task<IActionResult> Create([FromForm] Course course)
         {
+            course.Id = 0;
             if (course == null)
             {
                 return BadRequest("Geçersiz Kurs Bilgisi");
@@ -52,6 +53,7 @@ namespace UdemyProject.API.Controllers
             {
                 return BadRequest("Kurs id'si uyuşmuyor");
             }
+
             var existCourse = await _courseService.GetCourseByIdAsync(id);
             if(existCourse==null)
             {

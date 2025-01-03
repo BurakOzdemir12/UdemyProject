@@ -9,9 +9,9 @@ namespace UdemyProject.Service.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<TokenDto> CreateTokenAsync(LoginDto loginDto);
-        Task<TokenDto> CreateTokenByRefreshToken(string refreshToken);
-        Task<TokenDto> RevokerefreshToken(string refreshToken);
-        ClientTokenDto CreateClientToken(ClientLoginDto clientLoginDto);
+        Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
+        Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken);
+        Task<Response<NullDataDto>> RevokerefreshToken(string refreshToken);
+        Response<ClientTokenDto> CreateClientToken(ClientLoginDto clientLoginDto);
     }
 }
