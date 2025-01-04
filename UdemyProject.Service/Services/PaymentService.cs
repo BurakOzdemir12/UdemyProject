@@ -18,13 +18,14 @@ namespace UdemyProject.Service.Services
             _paymentRepository = paymentRepository;
         }
 
-        public async Task AddPaymentAsync(Guid userId, int courseId, decimal amount, string status)
+        public async Task AddPaymentAsync(Guid userId, int courseId, decimal amount, decimal totalPrice,string status)
         {
             var payment = new Payment
             {
                 UserId = userId,
                 CourseId = courseId,
                 Amount = 1,
+                TotalPrice = totalPrice,
                 PaymentDate = DateTime.UtcNow,
                 PaymentStatus = status,
                 PaymentMethod = "Credit Card" // Sabit örnek

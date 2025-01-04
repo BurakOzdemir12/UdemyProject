@@ -47,7 +47,7 @@ namespace UdemyProject.API.Controllers
                 return StatusCode(response.StatusCode, response);
             }
 
-            await _paymentService.AddPaymentAsync(userId, courseId, purchaseRequest.Amount, "Success");
+            await _paymentService.AddPaymentAsync(userId, courseId,purchaseRequest.TotalPrice ,purchaseRequest.Amount,  "Success");
 
             return Ok(response);
         }

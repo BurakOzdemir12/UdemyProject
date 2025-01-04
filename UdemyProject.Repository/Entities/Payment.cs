@@ -11,6 +11,7 @@ namespace UdemyProject.Repository.Entities
         public int Id { get; set; }
         public Guid UserId { get; set; } 
         public int CourseId { get; set; }  
+        public decimal TotalPrice { get; set; }
         public decimal Amount { get; set; } 
         public DateTime PaymentDate { get; set; }
         public string PaymentStatus { get; set; } 

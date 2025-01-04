@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UdemyProject.Repository;
 
@@ -11,9 +12,11 @@ using UdemyProject.Repository;
 namespace UdemyProject.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250104122624_payment")]
+    partial class payment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +257,7 @@ namespace UdemyProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("UdemyProject.Repository.Entities.Order", b =>
@@ -280,7 +283,7 @@ namespace UdemyProject.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("UdemyProject.Repository.Entities.Payment", b =>
@@ -320,7 +323,7 @@ namespace UdemyProject.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("UdemyProject.Repository.Entities.UserRefreshToken", b =>
@@ -337,7 +340,7 @@ namespace UdemyProject.Repository.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("userRefreshTokens", (string)null);
+                    b.ToTable("userRefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -19,6 +19,7 @@ namespace UdemyProject.Shared.DTOs
 
         public ErrorDto(List<string> errors, bool isShow)
         {
+
             Errors = errors;
             IsShow = isShow;
         }

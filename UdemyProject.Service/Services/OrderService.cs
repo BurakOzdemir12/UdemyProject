@@ -46,7 +46,14 @@ namespace UdemyProject.Service.Services
 
                 
                 await transaction.CommitAsync();
-                return Response<object>.Success(201);
+                return Response<object>.Success(new
+                {
+                    message = "Kurs başarıyla satın alındı.",
+                    courseId = courseId,
+                    userId = userId,
+                    orderId = order.Id,
+                    orderDate = order.OrderDate
+                }, 201);
 
             }
             catch(Exception ex)

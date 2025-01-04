@@ -1,4 +1,4 @@
-﻿using Azure;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,42 +29,40 @@ namespace UdemyProject.Service.Services
             throw new NotImplementedException();
         }
 
-        public async Task<AppUserDto> UserRegisterAsync(CreateUserDto createUserDto)
+
+        public async Task<Response<AppUserDto>> UserRegisterAsync( CreateUserDto createUserDto)
         {
-            var user = new AppUser { 
-                Email = createUserDto.Email, 
-                UserName = createUserDto.UserName ,
-                FullName = createUserDto.FullName ,
+            var user = new AppUser
+            {
+                Email = createUserDto.Email,
+                UserName = createUserDto.UserName,
+                FullName = createUserDto.FullName,
             };
+
             var hasUser = await _userManager.FindByEmailAsync(createUserDto.Email);
 
             if (hasUser != null)
             {
-                throw new Exception("Kullanıcı mevcut");
+                return Response<AppUserDto>.Fail("Kullanıcı zaten mevcut.", 400, true);
             }
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);
 
-
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description).ToList();
-
-                throw new Exception("Kullanıcı Oluşturulamadı");
+                return Response<AppUserDto>.Fail(string.Join(", ", errors), 400, true);
             }
 
             await AssignDefaultRoleToUser(user);
 
-            await _signInManager.SignInAsync(user, isPersistent: false);
-
-            return new AppUserDto
+            return Response<AppUserDto>.Success(new AppUserDto
             {
                 Id = user.Id,
                 FullName = user.FullName,
                 Email = user.Email,
                 UserName = user.UserName,
-            };
-
+            }, 200);
         }
 
         private async Task AssignDefaultRoleToUser(AppUser user)
@@ -79,21 +77,59 @@ namespace UdemyProject.Service.Services
             await _userManager.AddToRoleAsync(user, defaultRole);
         }
 
-        public async Task<AppUserDto> GetUserByMail(string email)
+        public async Task<Response<AppUserDto>> GetUserProfileAsync(Guid userId)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
-                throw new Exception("Böyle Bir Kullanıcı bulunamadı");
+                return Response<AppUserDto>.Fail("Kullanıcı bulunamadı.", 404, true);
             }
-            return new AppUserDto
+
+            return Response<AppUserDto>.Success(new AppUserDto
             {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName
-            };
+                UserName = user.UserName,
+                FullName = user.FullName,
+                Email = user.Email
+            }, 200);
         }
-        
+
+
+        public async Task<Response<AppUserDto>> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return Response<AppUserDto>.Fail("Kullanıcı bulunamadı.", 404, true);
+            }
+
+            user.UserName = updateUserDto.UserName ?? user.UserName;
+            user.FullName = updateUserDto.FullName ?? user.FullName;
+            user.Email = updateUserDto.Email ?? user.Email;
+
+            if (!string.IsNullOrEmpty(updateUserDto.NewPassword))
+            {
+                var result = await _userManager.ChangePasswordAsync(user, updateUserDto.CurrentPassword, updateUserDto.NewPassword);
+                if (!result.Succeeded)
+                {
+                    return Response<AppUserDto>.Fail("Şifre güncellemesi başarısız.", 400, true);
+                }
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                return Response<AppUserDto>.Fail("Kullanıcı güncellemesi başarısız.", 400, true);
+            }
+
+            return Response<AppUserDto>.Success(new AppUserDto
+            {
+                UserName = user.UserName,
+                FullName = user.FullName,
+                Email = user.Email
+            }, 200);
+        }
+
+
     }
+
 }

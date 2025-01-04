@@ -11,7 +11,7 @@ namespace UdemyProject.Service.Interfaces
     public interface IPaymentService
     {
         Task<bool> ProcessPaymentAsync(decimal amount, string paymentDetails);
-        Task AddPaymentAsync(Guid userId, int courseId, decimal amount, string status);
+        Task AddPaymentAsync(Guid userId, int courseId, decimal amount,decimal totalPrice, string status);
         Task<Response<List<Payment>>>GetUserPaymentsAsync(Guid userId);
     }
 }

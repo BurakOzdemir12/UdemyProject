@@ -10,8 +10,9 @@ namespace UdemyProject.Service.Interfaces
 {
     public interface IUserService
     {
-        Task<AppUserDto>UserRegisterAsync( CreateUserDto createUserDto);
-        Task<AppUserDto> GetUserByMail(string email);
+        Task<Response<AppUserDto>>UserRegisterAsync( CreateUserDto createUserDto);
+        Task<Response<AppUserDto>> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto);
+        Task<Response<AppUserDto>> GetUserProfileAsync(Guid userId);
         Task AddRoleToUser();
 
     }
