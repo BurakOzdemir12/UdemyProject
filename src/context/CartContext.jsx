@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import alertify from "alertifyjs";
+import axios from "axios";
 
 const CartContext = createContext();
 
@@ -15,18 +16,20 @@ export const CartProvider = ({ children }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Sepet verilerini localStorage'dan yükleme
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
+    if (user) {
+      const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
+      setCart(storedCarts[user.id] || []);
     }
-  }, []);
+  }, [user]);
 
-  // Sepet verilerini localStorage'a kaydetme
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (user) {
+      const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
+      storedCarts[user.id] = cart;
+      localStorage.setItem("carts", JSON.stringify(storedCarts));
+    }
+  }, [cart, user]);
 
   const addToCart = (item) => {
     if (!user) {
@@ -92,14 +95,48 @@ export const CartProvider = ({ children }) => {
     alertify.error("Ürün sepetten kaldırıldı!");
   };
 
-  const purchase = () => {
+  const purchase = async () => {
     if (cart.length === 0) {
       alertify.error("Sepetinizde ürün bulunmamaktadır!");
       return;
     }
-    setPurchasedItems((prevItems) => [...prevItems, ...cart]);
-    setCart([]);
-    alertify.success("Satın alma işlemi başarılı!");
+
+    try {
+      for (const item of cart) {
+        const purchaseRequest = {
+          amount: item.price,
+          paymentDetails: "Valid payment details here",
+          paymentMethod: "CreditCard",
+        };
+
+        const response = await axios.post(
+          `https://localhost:7000/api/Order/buy/${item.id}`,
+          purchaseRequest,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            },
+          }
+        );
+        
+          alertify.success(`Kurs satın alındı: ${item.name}`);
+      }
+
+      setPurchasedItems((prevItems) => [...prevItems, ...cart]);
+      setCart([]);
+      alertify.success("Satın alma işlemi başarılı!");
+      navigate("/profile");
+    } catch (error) {
+      console.error(
+        "Satın alma sırasında bir hata oluştu:",
+        error.response?.data || error.message
+      );
+
+      const errorMessage =
+        error.response?.data?.error?.errors?.[0] ||
+        "Satın alma işlemi sırasında bir hata oluştu.";
+      alertify.error(errorMessage);
+    }
   };
 
   const clearCart = () => {

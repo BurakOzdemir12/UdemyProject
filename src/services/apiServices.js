@@ -19,6 +19,15 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+export const updateProfile = async (updatedData) => {
+  try {
+    const response = await putData("/api/User/update-profile", updatedData);
+    return response; 
+  } catch (error) {
+    console.error("Profil güncellenirken hata oluştu:", error.response?.data || error.message);
+    throw error;
+  }
+};
 
 
 export const fetchData = async (endpoint) => {

@@ -1,35 +1,64 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Grid2,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { green } from "@mui/material/colors";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import loginimage from "../images/udemyloginpage.webp";
-import { useAuth } from "../context/AuthContext";
 import alertify from "alertifyjs";
-const Login = () => {
-  const { login, user } = useAuth();
+import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Button, Grid2, TextField, Typography } from "@mui/material";
+import { green } from "@mui/material/colors";
+import registerimage from "../images/registerpage.webp";
+
+const Register = () => {
+  const { login, register } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullname, setFullName] = useState("");
+  const [username, setUserName] = useState("");
   const [errors, setErrors] = useState("");
   const navigate = useNavigate();
-  
-  const handleLogin = async (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!email) {
+      newErrors.email = "Lütfen email adresinizi giriniz.";
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      newErrors.email = "Geçerli bir email adresi giriniz.";
+    }
+
+    if (!fullname) {
+      newErrors.fullname = "Ad Soyad alanı boş bırakılamaz.";
+    }
+
+    if (!username) {
+      newErrors.username = "Kullanıcı adı boş bırakılamaz.";
+    }
+
+    if (!password) {
+      newErrors.password = "Şifre boş bırakılamaz.";
+    } else if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      newErrors.password =
+        "Şifre en az 8 karakter olmalı, bir büyük harf, bir rakam ve bir özel karakter içermelidir.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      await login(email, password);
-      alertify.success("Giriş Başarılı");
-      navigate("/home");
+      await register(email, password, fullname, username);
+      alertify.success("Kayıt Başarılı");
+      navigate("/login");
     } catch {
-      setErrors("Kullanıcı adı veya parola hatalı");
-      alertify.error(" Giriş Başarısız ");
+      alertify.error("Kayıt Başarısız");
     }
   };
 
@@ -59,7 +88,7 @@ const Login = () => {
               style={{
                 backgroundRepeat: "no-repeat",
               }}
-              src={loginimage}
+              src={registerimage}
             />
           </Box>
         </Grid2>
@@ -98,19 +127,14 @@ const Login = () => {
             <Box gridColumn="span 12" gridRow="span 3">
               <Typography variant="h4" className="text-center" fontWeight={600}>
                 {" "}
-                Giriş Yap
+                Kaydol
               </Typography>
             </Box>
-            <Box gridColumn="span 12" gridRow="span 0">
-              <Typography variant="h5">
-                <hr />
-                Mail Adresin ile Giriş Yap
-              </Typography>
-            </Box>
+
             <Box
               padding={5}
               component="form"
-              onSubmit={handleLogin}
+              onSubmit={handleRegister}
               gridColumn="span 12"
               gridRow="span 12"
             >
@@ -118,10 +142,85 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                error={!!errors.email}
+                helperText={errors.email}
                 id="outlined-basic"
                 label="abc@email.com"
                 variant="outlined"
                 sx={{
+                  mt: 4,
+                  width: "100%",
+                  "& .MuiInputBase-input": {
+                    color: "black", // Giriş metni rengi
+                  },
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    color: "black",
+                    borderColor: "black", // Çerçeve rengi
+                    opacity: 0.3,
+                    borderRadius: "19px",
+                  },
+                  "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                    {
+                      color: "black",
+                      borderColor: "black",
+                    },
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    {
+                      color: "black",
+                      borderColor: "green",
+                    },
+                }}
+                InputLabelProps={{
+                  style: { color: "black" }, // Label rengi
+                }}
+              />
+              <TextField
+                value={fullname}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                error={!!errors.fullname}
+                helperText={errors.fullname}
+                id="outlined-basic"
+                label="Ad Soyad"
+                variant="outlined"
+                sx={{
+                  mt: 2,
+                  width: "100%",
+                  "& .MuiInputBase-input": {
+                    color: "black", // Giriş metni rengi
+                  },
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    color: "black",
+                    borderColor: "black", // Çerçeve rengi
+                    opacity: 0.3,
+                    borderRadius: "19px",
+                  },
+                  "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                    {
+                      color: "black",
+                      borderColor: "black",
+                    },
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    {
+                      color: "black",
+                      borderColor: "green",
+                    },
+                }}
+                InputLabelProps={{
+                  style: { color: "black" }, // Label rengi
+                }}
+              />
+              <TextField
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+                error={!!errors.username}
+                helperText={errors.username}
+                id="outlined-basic"
+                label="Kullanıcı Adı"
+                variant="outlined"
+                sx={{
+                  mt: 2,
                   width: "100%",
                   "& .MuiInputBase-input": {
                     color: "black", // Giriş metni rengi
@@ -151,8 +250,9 @@ const Login = () => {
               <TextField
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                
                 required
+                error={!!errors.password}
+                helperText={errors.password}
                 id="outlined-basic"
                 label="Şifre"
                 variant="outlined"
@@ -178,14 +278,13 @@ const Login = () => {
                       color: "black",
                       borderColor: "green", // Focus durumunda çerçeve rengi
                     },
-                  mt: 4,
+                  mt: 2,
                 }}
                 InputLabelProps={{
                   style: { color: "black" }, // Label rengi
                 }}
               />
 
-              {errors && <Typography color="error">{errors}</Typography>}
               <Button
                 type="submit"
                 variant="contained"
@@ -205,7 +304,7 @@ const Login = () => {
                 {" "}
                 <Typography variant="h5" fontWeight={400} fontFamily="serif">
                   {" "}
-                  Giriş Yap
+                  Kaydol
                 </Typography>
               </Button>
             </Box>
@@ -215,9 +314,9 @@ const Login = () => {
                 justifySelf: "end",
               }}
               gridColumn="span 12"
-              gridRow="span 3"
+              gridRow="span 6"
             >
-              <Link to="/register">
+              <Link to="/login">
                 <Button
                   sx={{
                     mx: 2,
@@ -227,7 +326,7 @@ const Login = () => {
                 >
                   <Typography variant="h5" fontWeight={400} fontFamily="serif">
                     {" "}
-                    Hesabınız Yok mu? Kaydol{" "}
+                    Hesabınız varsa. Giriş Yap!
                   </Typography>
                 </Button>
               </Link>
@@ -239,4 +338,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

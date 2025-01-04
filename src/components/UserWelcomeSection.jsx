@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Typography, Avatar, Link } from "@mui/material";
+import { useAuth } from "../context/AuthContext";
 
-const UserWelcomeSection = ({ user }) => {
+const UserWelcomeSection = ({ title, onEditProfile }) => {
+  const { user } = useAuth();
+
   return (
     <Box
       sx={{
@@ -34,23 +37,41 @@ const UserWelcomeSection = ({ user }) => {
           : "?"}
       </Avatar>
 
-      {/* Hoş Geldiniz Mesajı */}
       <Box>
         <Typography
           variant="h5"
           fontWeight="bold"
           sx={{
             fontSize: { xs: 20, sm: 25, md: 30, lg: 25, xl: 25, xxl: 30 },
-
             color: "#212529",
             marginBottom: 1,
           }}
         >
-          Tekrar hoş geldiniz, {user?.fullname || "Kullanıcı"}!
+          {title} {user?.fullname || "Kullanıcı"}!
         </Typography>
+
+        {/* Modal açan link */}
         <Link
-          href="#"
+          onClick={(e) => {
+            onEditProfile(); // Burada fonksiyon çağrılıyor
+          }}
           sx={{
+            color: "#007BFF",
+            fontSize: "1rem",
+            textDecoration: "none",
+            cursor: "pointer",
+            "&:hover": {
+              textDecoration: "underline",
+            },
+          }}
+        >
+          Profilini düzenle
+        </Link>
+
+        <Link
+          href="/purchasedhistory"
+          sx={{
+            mx: 2,
             color: "#007BFF",
             fontSize: "1rem",
             textDecoration: "none",
@@ -59,7 +80,7 @@ const UserWelcomeSection = ({ user }) => {
             },
           }}
         >
-          Profilini düzenle
+          Satın alma geçmişi
         </Link>
       </Box>
     </Box>

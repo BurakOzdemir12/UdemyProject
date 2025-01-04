@@ -16,7 +16,7 @@ import "react-credit-cards-2/dist/es/styles-compiled.css";
 import alertify from "alertifyjs";
 
 const Payment = () => {
-  const { purchase, calculateTotal, calculateTotalItems } = useCart();
+  const { cart, purchase, calculateTotal, calculateTotalItems } = useCart();
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
@@ -87,15 +87,13 @@ const Payment = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePayment = (e) => {
+  const handlePayment = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      purchase();
-      alertify.success("Ödeme Başarılı!");
-      navigate("/profile");
+      await purchase();
     } else {
-      alertify.error("Ödeme Başarısız!");
+      alertify.error("Lütfen ödeme bilgilerini doğru doldurun!");
     }
   };
 
@@ -236,11 +234,79 @@ const Payment = () => {
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ backgroundColor: "blueviolet", mt: 1, mx: 1 }}
+                sx={{ backgroundColor: "blueviolet", mt: 5, mb: 5 }}
                 onClick={handlePayment}
               >
                 Ödemeyi Tamamla
               </Button>
+              <Box display={"flex"} sx={{ gap: 1 }}>
+                <Header subtitle={"Sipariş ayrıntıları"} />{" "}
+                <Typography mt={1} alignSelf={"center"}>
+                  {" "}
+                  ({calculateTotalItems()} Kurs)
+                </Typography>
+              </Box>
+              {cart.map((item) => (
+                <Box
+                  key={item.id}
+                  display="flex"
+                  flexWrap="wrap"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  mb={3}
+                  p={2}
+                  sx={{
+                    borderBottom: "1px solid #ccc",
+                    gap: 2,
+                  }}
+                >
+                  <Box
+                    flex={{ xs: "1 1 100px", sm: "1 1 100px" }}
+                    textAlign="center"
+                  >
+                    <img
+                      src={item.image || "https://via.placeholder.com/100"}
+                      alt={item.name}
+                      style={{
+                        width: "75px",
+                        height: "75px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  </Box>
+
+                  <Box
+                    flex={{ xs: "1 1 auto", sm: "3 1 auto" }}
+                    ml={{ xs: 0, sm: 3 }}
+                  >
+                    <Typography variant="h6" fontWeight="bold">
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body2" fontWeight="600">
+                      {item.description}
+                    </Typography>
+                    <Typography>Adet: {item.quantity}</Typography>
+                  </Box>
+
+                  {/* Fiyat ve Miktar */}
+                  <Box
+                    flex={{ xs: "1 1 auto", sm: "2 1 auto" }}
+                    display="flex"
+                    flexDirection="column"
+                    alignItems={{ xs: "flex-start", sm: "flex-end" }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      color="success.main"
+                      mb={1}
+                    >
+                      ₺{(item.price * item.quantity).toFixed(2)}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
             </Box>
           </Grid2>
         </Grid2>
