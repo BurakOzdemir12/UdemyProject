@@ -11,15 +11,18 @@ import {
 } from "@mui/material";
 import Header from "../components/Header";
 import CourseCard from "../components/CourseCard";
+import { useAuth } from "../context/AuthContext";
+import UserWelcomeSection from "../components/UserWelcomeSection";
 
 const Home = () => {
   const { data: courses, loading, error } = useFetch(urlCourses);
+  const { user, logout } = useAuth();
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const coursesPerPage = 12;
+  const coursesPerPage = 8;
 
   const categories = useMemo(() => {
     if (!courses) return [];
@@ -48,14 +51,24 @@ const Home = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <Box padding={10}>
+    <Box 
+    sx={{
+      padding:{
+        xl:10,
+        xxl:10,
+        md:5,
+      }
+    }}>
       <Container maxWidth="xl">
         <Header
           title="İhtiyacınız olan tüm yetkinlikler tek bir yerde"
           subtitle="Kritik yetkinliklerden teknik konulara kadar çeşitli alanları kapsayan Udemy, profesyonel gelişiminizi destekler.
 "
         />
-
+        <Box mt={5} mb={5}>
+          <UserWelcomeSection user={user} />
+          
+        </Box>
         {/* Arama Alanı */}
         <Box
           sx={{
@@ -67,7 +80,7 @@ const Home = () => {
           }}
         >
           <TextField
-            label="Kurs Ara"
+            label="Dilediğiniz şeyi arayın"
             variant="outlined"
             fullWidth
             value={searchQuery}
@@ -94,9 +107,7 @@ const Home = () => {
           {categories.map((category) => (
             <Button
               key={category}
-              variant={
-                selectedCategory === category ? "contained" : "outlined"
-              }
+              variant={selectedCategory === category ? "contained" : "outlined"}
               onClick={() => setSelectedCategory(category)}
             >
               {category}
@@ -125,7 +136,7 @@ const Home = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                height: "100%", 
+                height: "100%",
               }}
             >
               <CourseCard course={course} />
