@@ -1,5 +1,6 @@
+import alertify from "alertifyjs";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -29,7 +30,33 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
-
+  const register = async (email, password, fullname, userName) => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7000/api/User/register",
+        {
+          email,
+          password,
+          fullname,
+          userName,
+        }
+      );
+  
+      if (response.data.success) {
+        alertify.success(response.data.message || "Kayıt başarılı!");
+      } else {
+        throw new Error(response.data.errors || "Kayıt sırasında bir hata oluştu.");
+      }
+    } catch (error) {
+      console.error("Register Failed", error.response?.data || error.message);
+      alertify.error(
+        error.response?.data?.errors?.[0] || "Kayıt sırasında bir hata oluştu."
+      );
+      throw error;
+    }
+  };
+  
+  
   const login = async (email, password) => {
     try {
       const response = await axios.post(
@@ -80,8 +107,13 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      console.error("Profil güncellenirken hata oluştu:", error.response?.data || error.message);
-      throw new Error(error.response?.data?.message || "Güncelleme sırasında bir hata oluştu.");
+      console.error(
+        "Profil güncellenirken hata oluştu:",
+        error.response?.data || error.message
+      );
+      throw new Error(
+        error.response?.data?.message || "Güncelleme sırasında bir hata oluştu."
+      );
     }
   };
 
@@ -91,7 +123,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, updateProfile, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, updateProfile, logout, loading ,register}}
+    >
       {children}
     </AuthContext.Provider>
   );

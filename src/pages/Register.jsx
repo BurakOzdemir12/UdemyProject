@@ -48,19 +48,19 @@ const Register = () => {
   };
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     try {
       await register(email, password, fullname, username);
-      alertify.success("Kayıt Başarılı");
-      navigate("/login");
-    } catch {
-      alertify.error("Kayıt Başarısız");
+      navigate("/login"); // Kayıt başarılıysa giriş sayfasına yönlendir
+    } catch (error) {
+      setErrors(error.message || "Kayıt sırasında bir hata oluştu.");
     }
   };
+  
 
   return (
     <Box

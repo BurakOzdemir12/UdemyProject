@@ -10,10 +10,11 @@ function CourseCard({ course, hideAddToCart }) {
   return (
     <Box
     
-      component={Link}
-      to={`/course/${course.id}`}
+      // component={Link}
+      // to={`/course/${course.id}`}
       key={course.id}
       sx={{
+        minHeight: "350px",
         textDecoration: "none",
         textTransform: "none",
         border: "1px solid #ccc",
@@ -28,10 +29,12 @@ function CourseCard({ course, hideAddToCart }) {
         }
       }}
     >
+            <Link to={`/course/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+
       <Typography sx={{ fontWeight: 700 }} variant="h5">
         {course.name}
       </Typography>
-      <Typography sx={{ fontWeight: 400 }} variant="h6">
+      <Typography sx={{ fontWeight: 400 }} variant="body1">
         {course.description}
       </Typography>
       {/* <Typography sx={{fontWeight:400}} variant="body2">{course.category}</Typography> */}
@@ -44,9 +47,15 @@ function CourseCard({ course, hideAddToCart }) {
       <Typography sx={{ fontWeight: 400 }} variant="body2">
         {course.OrderDate}
       </Typography>
+      </Link>
+
       {hideAddToCart && (
         <Button
-          onClick={() => addToCart(course)}
+        
+        onClick={(event) => {
+          event.stopPropagation(); 
+          addToCart(course);
+        }}
           variant="contained"
           sx={{ width: "50%", backgroundColor: "purple", color: "white" }}
         >
@@ -58,3 +67,5 @@ function CourseCard({ course, hideAddToCart }) {
 }
 
 export default CourseCard;
+
+

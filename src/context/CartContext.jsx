@@ -11,33 +11,53 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [purchasedItems, setPurchasedItems] = useState([]);
-  const [pendingItem, setPendingItem] = useState(null);
-
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  
   useEffect(() => {
+    const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
+    const guestCart = storedCarts.guest || [];
+    
     if (user) {
-      const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
-      setCart(storedCarts[user.id] || []);
+      const userCart = storedCarts[user.id] || [];
+      const mergedCart = mergeCarts(userCart, guestCart);
+
+      setCart(mergedCart);
+      delete storedCarts.guest; 
+      storedCarts[user.id] = mergedCart;
+      localStorage.setItem("carts", JSON.stringify(storedCarts));
+    } else {
+      setCart(guestCart);
     }
   }, [user]);
 
   useEffect(() => {
+    const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
     if (user) {
-      const storedCarts = JSON.parse(localStorage.getItem("carts") || "{}");
       storedCarts[user.id] = cart;
-      localStorage.setItem("carts", JSON.stringify(storedCarts));
+    } else {
+      storedCarts.guest = cart;
     }
+    localStorage.setItem("carts", JSON.stringify(storedCarts));
   }, [cart, user]);
 
+  const mergeCarts = (userCart, guestCart) => {
+    const merged = [...userCart];
+
+    guestCart.forEach((guestItem) => {
+      const existingItem = merged.find((item) => item.id === guestItem.id);
+      if (existingItem) {
+        existingItem.quantity += guestItem.quantity;
+      } else {
+        merged.push(guestItem);
+      }
+    });
+
+    return merged;
+  };
+
   const addToCart = (item) => {
-    if (!user) {
-      alertify.error("Giriş yapmadığınız için ürünü sepete ekleyemezsiniz!");
-      setPendingItem(item);
-      navigate("/login");
-      return;
-    }
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
       if (existingItem) {
@@ -49,27 +69,8 @@ export const CartProvider = ({ children }) => {
       }
       return [...prevCart, { ...item, quantity: 1 }];
     });
-    alertify.success("Ürün sepete eklendi!");
-  };
 
-  const addPendingItemToCart = () => {
-    if (pendingItem) {
-      setCart((prevCart) => {
-        const existingItem = prevCart.find(
-          (cartItem) => cartItem.id === pendingItem.id
-        );
-        if (existingItem) {
-          return prevCart.map((cartItem) =>
-            cartItem.id === pendingItem.id
-              ? { ...cartItem, quantity: cartItem.quantity + 1 }
-              : cartItem
-          );
-        }
-        return [...prevCart, { ...pendingItem, quantity: 1 }];
-      });
-      alertify.success("Bekleyen Ürün sepete eklendi!");
-      setPendingItem(null);
-    }
+    alertify.success("Ürün sepete eklendi!");
   };
 
   const increaseQuantity = (id) => {
@@ -100,7 +101,7 @@ export const CartProvider = ({ children }) => {
       alertify.error("Sepetinizde ürün bulunmamaktadır!");
       return;
     }
-
+  
     try {
       for (const item of cart) {
         const purchaseRequest = {
@@ -108,7 +109,7 @@ export const CartProvider = ({ children }) => {
           paymentDetails: "Valid payment details here",
           paymentMethod: "CreditCard",
         };
-
+  
         const response = await axios.post(
           `https://localhost:7000/api/Order/buy/${item.id}`,
           purchaseRequest,
@@ -118,10 +119,10 @@ export const CartProvider = ({ children }) => {
             },
           }
         );
-        
-          alertify.success(`Kurs satın alındı: ${item.name}`);
+  
+        alertify.success(`Kurs satın alındı: ${item.name}`);
       }
-
+  
       setPurchasedItems((prevItems) => [...prevItems, ...cart]);
       setCart([]);
       alertify.success("Satın alma işlemi başarılı!");
@@ -131,34 +132,35 @@ export const CartProvider = ({ children }) => {
         "Satın alma sırasında bir hata oluştu:",
         error.response?.data || error.message
       );
-
+  
       const errorMessage =
         error.response?.data?.error?.errors?.[0] ||
         "Satın alma işlemi sırasında bir hata oluştu.";
       alertify.error(errorMessage);
     }
   };
-
+  
   const clearCart = () => {
     setCart([]);
     alertify.error("Sepetiniz temizlendi!");
   };
+
   const calculateTotal = () =>
     cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
   const calculateTotalItems = () =>
     cart.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <CartContext.Provider
       value={{
         cart,
         purchasedItems,
-        pendingItem,
-        clearCart,
         addToCart,
-        addPendingItemToCart,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
+        clearCart,
         purchase,
         calculateTotal,
         calculateTotalItems,

@@ -26,9 +26,7 @@ export default function App() {
             <Route
               path="/cart"
               element={
-                <ProtectedRoute>
                   <Cart />
-                </ProtectedRoute>
               }
             />
             <Route

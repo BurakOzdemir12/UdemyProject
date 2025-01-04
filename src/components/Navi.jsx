@@ -37,7 +37,7 @@ const Navi = (args) => {
         <Col xs={12} sm={12} md={12} lg={12} xl={12}>
           <Navbar
             style={{ backgroundColor: "seashell", color: "black" }}
-            expand="xl"
+            expand="lg"
             {...args}
           >
             <NavbarBrand className="brand" href="/home">
@@ -140,12 +140,21 @@ const Navi = (args) => {
                     }}
                   >
                    {user?.fullname || (
+                    <>
                       <Link
                         to="/login"
                         style={{ textDecoration: "none", color: "black" }}
                       >
-                        Giriş Yap
+                        Giriş Yap 
                       </Link>
+                      <Link
+                      className="mx-3"
+                        to="/register"
+                        style={{ textDecoration: "none", color: "black" }}
+                      >
+                        Kaydol 
+                      </Link>
+                      </>
                     )}
                   </Typography>
                 </Box>
@@ -173,8 +182,11 @@ const Navi = (args) => {
                         Profil
                       </MenuItem>
                       <MenuItem onClick={handleLogout}>Çıkış Yap</MenuItem>
+                      <MenuItem component={Link}
+                      to="/login"
+                      >Hesap Değiştir</MenuItem>
                     </>
-                  ) : (
+                  ) : (<>
                     <MenuItem
                       component={Link}
                       to="/login"
@@ -182,6 +194,15 @@ const Navi = (args) => {
                     >
                       Giriş Yap
                     </MenuItem>
+                    
+                    <MenuItem
+                      component={Link}
+                      to="/register"
+                      onClick={handleMenuClose}
+                    >
+                      Kaydol
+                    </MenuItem>
+                    </>
                   )}
                 </Menu>
               </Box>

@@ -8,18 +8,39 @@ import CoursesFilter from "../components/filters/CourseFilter";
 import { useAuth } from "../context/AuthContext";
 import ProfileUpdateModal from "../components/modals/ProfileUpdateModal";
 import { updateProfile } from "../services/apiServices";
-
+import { ClipLoader } from "react-spinners";
 const Home = () => {
   const { data: courses, loading, error } = useFetch(urlCourses);
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  
+  if (loading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <ClipLoader color="#007BFF" size={180} />
+      </Box>
+    );
 
+  if (error)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <p>Error: {error.message}</p>
+      </Box>
+    );
   return (
     <Box>
-      <Container maxWidth="xl">
+      <Container  maxWidth="xl">
         <Header
           title="İhtiyacınız olan tüm yetkinlikler tek bir yerde"
           subtitle="Kritik yetkinliklerden teknik konulara kadar çeşitli alanları kapsayan Udemy, profesyonel gelişiminizi destekler."
