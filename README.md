@@ -1,70 +1,93 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Udemy Clone Project
 
-## Available Scripts
 
-In the project directory, you can run:
+Bu proje, Inveon tarafından verilen bir proje kapsamında temel bir kurs satış sitesinin geliştirilmesi amacıyla hazırlanmıştır. Proje, modern web teknolojilerini ve katmanlı mimari prensiplerini kullanarak kullanıcı dostu ve güvenli bir uygulama geliştirmeyi hedeflemektedir.
 
-### `npm start`
+Projenin Amacı
+Bu projenin temel amacı, kullanıcıların kursları inceleyebileceği, satın alabileceği ve profillerini yönetebileceği bir platform oluşturmaktır. Bunun yanı sıra:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Modern frontend ve backend teknolojilerini kullanarak kapsamlı bir web uygulaması geliştirmek
+- JWT tabanlı kimlik doğrulama ile güvenliği sağlamak,
+- Responsive bir tasarım ile tüm cihazlarda kullanıcı deneyimini optimize etmek.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Teknolojiler
+- React.js, Material UI
+- Asp.Net Core API (N-Layer Architecture)
+- MSSQL, EF Core
+- JWT, Identity
 
-### `npm test`
+# Proje Özellikleri
+- Frontend (React)
+1. Ana Sayfa
+- Mevcut kursların kartlar şeklinde listelenmesi.
+- Arama özelliği ile kurs ismine göre filtreleme.
+- Kurs kartlarında şu bilgiler yer alır:
+  *  Kurs adı
+  * Açıklama
+  * Fiyat
+  * Detaylara Git butonu
+2.  Kurs Detay Sayfası
+  * Seçilen kursun detaylarını gösterir.
+  * Kullanıcı giriş yapmışsa kursu satın alma özelliği.
+  * Kullanıcı giriş yapmamışsa oturum açma uyarısı.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Kullanıcı Yönetimi
+  * Kullanıcılar siteye kayıt olabilir ve giriş yapabilir.
+  * Kullanıcı bilgileri güvenli bir şekilde saklanır.
+  * Kullanıcının satın aldığı kurslar profil sayfasında görüntülenebilir.
+4. Satın Alma ve Ödeme
+  * Kullanıcı kursları satın alabilir.
+  * Başarılı satın alma işlemleri sonrası sipariş geçmişine erişebilir.
+ ------------------------------------------------------------ 
+- Backend (ASP.NET Core API)
+1.  JWT Kimlik Doğrulama
 
-### `npm run build`
+* Kullanıcıların güvenli bir şekilde giriş yapmasını sağlar.
+* Her kullanıcının yalnızca kendi verilerine erişmesini sağlar.
+2. API Katmanları
+* Kullanıcı Yönetimi: Kayıt, giriş, profil güncelleme.
+* Kurs Yönetimi: Kurs listeleme, arama, detay görüntüleme.
+* Satın Alma: Kurs satın alma ve sipariş geçmişi.
+3. N-Layer Architecture
+* İş mantığı, veri erişimi ve sunum katmanlarının ayrıştırıldığı bir yapı.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Proje Akışı
+Kullanıcı Akışı
+Kullanıcı, ana sayfada kursları görüntüler.
+İlgilendiği bir kursun detaylarını inceleyebilir.
+Üye olarak veya giriş yaparak kursu satın alabilir.
+Satın aldığı kursları profil sayfasında görüntüleyebilir.
+Admin Akışı (Opsiyonel)
+Kurs yönetimi ve kullanıcı işlemleri için bir admin paneli eklenebilir.
+Yeni kurs ekleme, güncelleme veya silme işlemleri yapılabilir.
+## Proje Nasıl Çalıştırılır?
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Depoyu klonlayın:
+  git clone https://github.com/BurakOzdemir12/UdemyProject.git
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Bağımlılıkları yükleyin:
+ - cd client-react
+ - npm install
+ - cd ../API
+ - dotnet restore
 
-### `npm run eject`
+3. React ve ASP.NET Core projelerini çalıştırın:
+- cd client-react
+- npm start
+- cd ../API
+- dotnet run
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Ekran Görüntüleri
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![Giriş Sayfası](./public/images/frgithub/Login.png)
+![Kaydolma Sayfası](./public/images/frgithub/Register.png)
+![Ana Sayfa](./public/images/frgithub/home.png)
+![Kurs Detayları](./public/images/frgithub/coursedetails.png)
+![Sepet](./public/images/frgithub/Cart.png)
+![Ödeme Form](./public/images/frgithub/PaymentForm.png)
+![Profil](./public/images/frgithub/Profile.png)
+![Modal](./public/images/frgithub/updateprofile.png)
+![Ödemeler](./public/images/frgithub/payments.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  
